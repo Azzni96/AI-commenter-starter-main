@@ -49,8 +49,11 @@ const createDish = async (
     };
     // TODO: Implement database insert
     console.log('Creating dish:', dishData);
-    console.log('Generated image filename:', res.locals.filename);
-    res.status(201).json({message: 'Dish created successfully'});
+    console.log('Generated image filename:', res.locals.filename || 'default.png');
+    
+    res.status(201).json({
+      message: `Dish "${dishData.dish_name}" created successfully with image: ${dishData.filename}`
+    });
   } catch (error) {
     next(new CustomError((error as Error).message, 500));
   }

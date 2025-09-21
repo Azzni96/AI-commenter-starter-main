@@ -36,14 +36,24 @@ const makeThumbnail = async (
   next: NextFunction,
 ) => {
   try {
-    console.log(res.locals.filename);
+    console.log('Thumbnail for:', res.locals.filename);
+    
+    // Only create thumbnail if we have a real image file (not default.png)
+    if (!res.locals.filename || res.locals.filename === 'default.png') {
+      console.log('Skipping thumbnail creation for default image');
+      next();
+      return;
+    }
+
     await sharp(`./uploads/${res.locals.filename}`)
       .resize(160, 160)
       .png()
       .toFile(`./uploads/thumb_${res.locals.filename}`);
+    console.log('Thumbnail created successfully');
     next();
   } catch (error) {
-    next(new CustomError('Thumbnail not created', 500));
+    console.log('Thumbnail creation failed:', error);
+    next();
   }
 };
 
@@ -53,6 +63,13 @@ const getAiImage = async (
   next: NextFunction,
 ) => {
   try {
+    // Check if we have a valid API key
+    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'placeholder_key') {
+      console.log('Skipping AI image generation - no valid API key');
+      next();
+      return;
+    }
+
     const response = await openai.images.generate({
       model: 'dall-e-2',
       prompt: `Name of dish: ${req.body.dish_name}. The description of the dish: ${req.body.description}. Type of the dish: ${req.body.dish_type}.`,
@@ -69,7 +86,7 @@ const getAiImage = async (
     res.locals.url = response.data[0].url;
     next();
   } catch (error) {
-    console.log(error);
+    console.log('AI image generation failed:', error);
     next();
   }
 };
