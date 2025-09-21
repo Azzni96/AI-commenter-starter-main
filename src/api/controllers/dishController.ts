@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from 'express';
-import CustomError from '../classes/CustomError';
-import {Dish} from '../types/DBTypes';
-import {MessageResponse} from '../types/MessageTypes';
+import CustomError from '../../classes/CustomError';
+import {Dish} from '../../types/DBTypes';
+import {MessageResponse} from '../../types/MessageTypes';
 
 // Get all dishes
 const getDishes = async (
