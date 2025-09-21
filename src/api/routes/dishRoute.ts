@@ -5,7 +5,7 @@ import {
   getAiImage,
   saveAiImage,
   makeThumbnail,
-} from '../middlewares';
+} from '../../middlewares';
 import {
   getDishes,
   getDish,

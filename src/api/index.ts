@@ -1,7 +1,7 @@
 import express from 'express';
 
 import commentRoute from './routes/commentRoute';
-import dishRoute from '../routes/dishRoute';
+import dishRoute from './routes/dishRoute';
 
 import {MessageResponse} from '../types/MessageTypes';
 
